@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>JavaScript Error Handling</h2>
+
+
+<p id="demo"></p>
+
+<script>
+
+var timezone = 'Australia/Sydney';
+
+try {
+  timezone = ("New Timezone").format("au");
+}
+catch(err) {
+  timezone = 'Australia/Brisbane';
+}
+
+
+document.getElementById("demo").innerHTML = timezone;
+
+</script>
+
+</body>
+</html>
