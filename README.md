@@ -1,2 +1,2 @@
-# js-examples-
+# js-examples
 Some JavaScript examples 
