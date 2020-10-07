@@ -1,0 +1,95 @@
+
+<!DOCTYPE html>
+<html>
+   <head>
+      <script>
+         function _setCookie(c_name,value,expiredays)
+         {
+            var exdate=new Date();
+            exdate.setDate(exdate.getDate()+expiredays);
+
+            var domain = ".google.";
+            domain = domain + document.location.host.split(domain)[1];
+            // for handeling the multiple environment within same domain
+            document.cookie=c_name+ "=" + window.btoa(value) + 
+                            "; domain=" + domain + 
+                            "; expires="+ exdate.toUTCString() +
+                            "; secure=''" + 
+                            "; samesite=strict";
+         }
+         // window.btoa() for Base64  encoding
+         
+         function _getCookie(c_name)
+         {
+         if (document.cookie.length>0)
+           {
+           c_start=document.cookie.indexOf(c_name + "=");
+           if (c_start!=-1)
+             {
+             c_start=c_start + c_name.length+1;
+             c_end=document.cookie.indexOf(";",c_start);
+             if (c_end==-1) c_end=document.cookie.length;
+             return window.atob(document.cookie.substring(c_start,c_end));  // window.atob() for Base64  encoding
+             
+             }
+           }
+         return "";
+         }
+         
+         function setCookie() 
+         {
+           var form=document.setingForm;
+           var json = [];
+           // Loop through all the form elements
+           for (var i=0;i<form.length;i++) {
+             // Make sure they're valid to be stored (i.e. checked, not a button)
+             if (form.elements[i].name && (form.elements[i].checked
+               || /select|textarea/i.test(form.elements[i].nodeName)
+               || /text|password/i.test(form.elements[i].type))) {
+               // Store them in an object association
+               var entry = {};
+               entry[form.elements[i].name] = form.elements[i].value;
+               json.push(entry);
+              //  alert(form.elements[i].id+": "+form.elements[i].value);
+             }
+           }
+           _setCookie("VA_TB_ACCOUNT",JSON.stringify(json),14);
+            alert(JSON.stringify(json));
+         }
+         
+         function getCookie() {
+           // load values from cookie
+           var cookie = _getCookie("VA_TB_ACCOUNT");
+           if(cookie.length > 10){
+             var retval = JSON.parse(cookie);
+             //alert(retval.length);
+             for(var i=0;i<retval.length;i++) {
+               var obj = retval[i];
+               for(var key in obj){
+                 //alert(key+": "+obj[key]);
+                 document.getingForm.elements[key].value = obj[key];
+               }
+             }
+           }
+         }
+         
+      </script>
+   </head>
+   <body>
+      <form action="#" method="POST" id="setingForm" name="setingForm" onsubmit="return setCookie()">
+         <input type="text" name="a" id="a" />
+         <input type="text" name="b" id="b" />
+         <input type="submit" value="Set" />
+      </form>
+
+      <hr />
+      <br /><br />
+
+      <form action="#" method="GET" id="getingForm" name="getingForm" onsubmit="return getCookie()">
+         <input type="submit" value="Get" />
+         <input type="text" name="a" id="a" />
+         <input type="text" name="b" id="b" />
+      </form>
+
+   </body>
+</html>
