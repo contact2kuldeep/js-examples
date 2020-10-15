@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+      <script>
+         function checkNumber() {
+         var regexCheck = /^(777)([0-9]{10})$/;
+         var standCheck=/^[0-9]\d{8,12}$/;
+         var _creditVal = $("#user-name").val().trim();
+         var _result = document.getElementById("result");
+         
+         if (regexCheck.test(_creditVal) && luhn_validate(_creditVal)) {
+         _result.innerHTML = "This is FFC account";
+         } else if (standCheck.test(_creditVal) && !luhn_validate(_creditVal)) {
+         _result.innerHTML = "This is Standard account";
+         } else {
+         _result.innerHTML = "Please enter a valid number";
+         }
+         return false;
+         
+         }
+         
+         function luhn_validate(fullcode) {
+         return luhn_checksum(fullcode) == 0;
+         }
+         
+         
+         function luhn_checksum(code) {
+         var len = code.length;
+         var parity = len % 2;
+         var sum = 0;
+         for (var i = len - 1; i >= 0; i--) {
+         var d = parseInt(code.charAt(i));
+         if (i % 2 == parity) {
+            d *= 2;
+         }
+         if (d > 9) {
+            d -= 9;
+         }
+         sum += d;
+         }
+         return sum % 10;
+         }
+         
+         function luhn_caclulate(partcode) {
+         var checksum = luhn_checksum(partcode + "0");
+         return checksum == 0 ? 0 : 10 - checksum;
+         }
+      </script>
+   </head>
+   
+   
+   
+   <body>
+      <input type="text" value="" maxlength="13" id="user-name" placeholder="Enter a 9-13 digit number" required>
+      <input type="submit" value="Check the number" onclick="return checkNumber();">
+      <div id="result"></div>
+   </body>
+</html>
